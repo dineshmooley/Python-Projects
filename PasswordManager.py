@@ -13,8 +13,9 @@ def valid_user() -> bool:
 def add_pwd():
     with open('password.txt','a') as f:
         if valid_user():
-            f.write((user_name := input("Enter the username : ").lower()) + " : "+ (pwd := input("Enter password : ").lower()) + "\n")
-            print("Password succesfullt added to the application")
+            f.write((user_name := input("Enter the username : ").lower()) + ":"+ (pwd := input("Enter password : ").lower()) + "\n")
+            print("Password succesfully added to the application")
+            main()
         
         else:
             print("Wrong password, try again!")
@@ -25,14 +26,23 @@ def ret_pwd():
     
     with open('password.txt', 'r') as f:
 
-        if f.read() == " ":
-            print("There are no entries in the application")
+        if valid_user():
+            found = False
+            user_inp = input("Enter the username : ")
+            for entry in f.readlines():
+                username, password = entry.rstrip().split(":")
+                if user_inp == username:
+                    print("Password is : ",password)  
+                    found = True                     
 
-        for entry in f.readlines():
-            if (user_name := input("Enter the username : ").lower()) == entry:
-                return entry
-            
-        return "There is no such username. Try again"
+            if not found:
+                print("No such username")
+                main()
+        else:
+            print("Wrong password, try again!")
+            main()
+
+        
 
 # driver code
 def main():
@@ -43,5 +53,6 @@ def main():
         ret_pwd()
     elif user_input == "add":
         add_pwd()
-if _name_ == "_main_":
+
+if __name__ == "__main__":
     main()
